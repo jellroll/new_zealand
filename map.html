@@ -22,12 +22,87 @@
     <script>
       
         var map;
+        
+//        var auckland = {lat: -36.8621448, lng: 174.5852843};
+//        var brisbane = {lat: -27.4050502, lng: 152.4424006};
+//        var cairns = {lat: -16.9194772, lng: 145.4503093};
+//        var sydney = {lat: -33.7960361, lng: 150.6422458};
       
+        var cityCoords = {};
+
+        // add items to hashmap
+        cityCoords["auckland"] = {lat: -36.8621448, lng: 174.5852843};
+        cityCoords["brisbane"] = {lat: -27.4050502, lng: 152.4424006};
+        cityCoords["cairns"] = {lat: -16.9194772, lng: 145.4503093};
+        cityCoords["sydney"] = {lat: -33.7960361, lng: 150.6422458};
+        
+//        var key = function(obj){
+//        // some unique object-dependent key
+//        return obj.totallyUniqueEmployeeIdKey; // just an example
+//        };
+//
+//        var dict = {};
+//        dict[key(obj1)] = obj1;
+//        dict[key(obj2)] = obj2;
+        
+        /**
+        * The centerControl adds a control to the map that recenters the map on
+        * a given city.
+        * This constructor takes the control DIV as an argument.
+        * @constructor
+        */
+        function CenterControl(controlDiv, map, city) {
+
+            // Set CSS for the control border.
+            var controlUI = document.createElement('div');
+            controlUI.style.backgroundColor = '#fff';
+            controlUI.style.border = '2px solid #fff';
+            controlUI.style.borderRadius = '3px';
+            controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+            controlUI.style.cursor = 'pointer';
+            controlUI.style.marginBottom = '22px';
+            controlUI.style.textAlign = 'center';
+            controlUI.title = 'Click to recenter on ' + city;
+            controlDiv.appendChild(controlUI);
+
+            // Set CSS for the control interior.
+            var controlText = document.createElement('div');
+            controlText.style.color = 'rgb(25,25,25)';
+            controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
+            controlText.style.fontSize = '16px';
+            controlText.style.lineHeight = '38px';
+            controlText.style.paddingLeft = '5px';
+            controlText.style.paddingRight = '5px';
+            controlText.innerHTML = city;
+            controlUI.appendChild(controlText);
+
+            // Setup the click event listeners: set the center to auckland
+            controlUI.addEventListener('click', function() {
+                map.setCenter(cityCoords[city]);
+            });
+
+        }
+
+        
         function initMap() {
             map = new google.maps.Map(document.getElementById('map'), {
-                center: {lat: -36.8498297, lng: 174.7586753},
+                center: cityCoords["auckland"],
                 zoom: 8
             });
+            
+            // Create the div to hold the control and call the CenterControl()
+            // constructor passing in this DIV.
+            var centerAucklandControlDiv = document.createElement('div');
+            var centerAucklandControl = new CenterControl(centerAucklandControlDiv, map, 'auckland');
+
+            centerAucklandControlDiv.index = 1;
+            map.controls[google.maps.ControlPosition.TOP_RIGHT].push(centerAucklandControlDiv);
+            
+            var centerBrisbaneControlDiv = document.createElement('div');
+            var centerBrisbaneControl = new CenterControl(centerBrisbaneControlDiv, map, 'brisbane');
+            
+            centerBrisbaneControlDiv.index = 2;
+            map.controls[google.maps.ControlPosition.TOP_RIGHT].push(centerBrisbaneControlDiv);
         }
         
         // If it is a mobile device, set height and width to 100%
