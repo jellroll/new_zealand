@@ -2,7 +2,8 @@
 <html>
   <head>
     <title>New Zealand Trip</title>
-    <meta name="viewport" content="initial-scale=1.0">
+      <!-- Map should be displayed full-screen and should not be resizable by the user -->
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
     <style>
       html, body {
@@ -47,7 +48,7 @@
     </script>
     
     <!-- The async attribute lets the browser render the rest of your website while the Maps API loads. When the API is ready, it will call the initMap function -->
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVaOS_nhSuSxUYX7hSCRehBgPM83vGGFM&callback=initMap">
+    <script async defer src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyBVaOS_nhSuSxUYX7hSCRehBgPM83vGGFM&callback=initMap">
     </script>
         
   </body>
