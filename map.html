@@ -90,19 +90,34 @@
                 zoom: 8
             });
             
-            // Create the div to hold the control and call the CenterControl()
-            // constructor passing in this DIV.
-            var centerAucklandControlDiv = document.createElement('div');
-            var centerAucklandControl = new CenterControl(centerAucklandControlDiv, map, 'auckland');
+            for (var city in cityCoords) {
+                
+                var count = 1;
+                
+                // Create the div to hold the control and call the CenterControl()
+                // constructor passing in this DIV.
+                var centerControlDiv = document.createElement('div');
+                var centerControl = new CenterControl(centerControlDiv, map, city);
 
-            centerAucklandControlDiv.index = 1;
-            map.controls[google.maps.ControlPosition.TOP_RIGHT].push(centerAucklandControlDiv);
+                centerControlDiv.index = count;
+                map.controls[google.maps.ControlPosition.TOP_RIGHT].push(centerControlDiv);
+                
+                count++;
+            }
             
-            var centerBrisbaneControlDiv = document.createElement('div');
-            var centerBrisbaneControl = new CenterControl(centerBrisbaneControlDiv, map, 'brisbane');
-            
-            centerBrisbaneControlDiv.index = 2;
-            map.controls[google.maps.ControlPosition.TOP_RIGHT].push(centerBrisbaneControlDiv);
+//            // Create the div to hold the control and call the CenterControl()
+//            // constructor passing in this DIV.
+//            var centerAucklandControlDiv = document.createElement('div');
+//            var centerAucklandControl = new CenterControl(centerAucklandControlDiv, map, 'auckland');
+//
+//            centerAucklandControlDiv.index = 1;
+//            map.controls[google.maps.ControlPosition.TOP_RIGHT].push(centerAucklandControlDiv);
+//            
+//            var centerBrisbaneControlDiv = document.createElement('div');
+//            var centerBrisbaneControl = new CenterControl(centerBrisbaneControlDiv, map, 'brisbane');
+//            
+//            centerBrisbaneControlDiv.index = 2;
+//            map.controls[google.maps.ControlPosition.TOP_RIGHT].push(centerBrisbaneControlDiv);
         }
         
         // If it is a mobile device, set height and width to 100%
