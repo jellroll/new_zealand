@@ -90,19 +90,21 @@
                 zoom: 8
             });
             
+            var cityCoordsLength = Object.keys(cityCoords).length
+            
             for (var city in cityCoords) {
                 
-                var count = 1;
+                //var index = cityCoordsLength;
                 
                 // Create the div to hold the control and call the CenterControl()
                 // constructor passing in this DIV.
                 var centerControlDiv = document.createElement('div');
                 var centerControl = new CenterControl(centerControlDiv, map, city);
 
-                centerControlDiv.index = count;
+                centerControlDiv.index = cityCoordsLength;
                 map.controls[google.maps.ControlPosition.TOP_RIGHT].push(centerControlDiv);
                 
-                count++;
+                cityCoordsLength--;
             }
             
 //            // Create the div to hold the control and call the CenterControl()
