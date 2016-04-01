@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>New Zealand Trip</title>
+      <!-- Map should be displayed full-screen and should not be resizable by the user -->
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+
+    <div id="map"></div>
+    <script>
+      
+        var map;
+        var map2;
+        var infoWindow;
+        var cityCoords = {};
+
+        
+        
+        // add items to hashmap
+        cityCoords["auckland"] = {lat: -36.8621448, lng: 174.5852843};
+        cityCoords["brisbane"] = {lat: -27.4050502, lng: 152.4424006};
+        cityCoords["cairns"] = {lat: -16.9194772, lng: 145.4503093};
+        cityCoords["sydney"] = {lat: -33.7960361, lng: 150.6422458};
+        
+        
+        /**
+        * The centerControl adds a control to the map that recenters the map on
+        * a given city.
+        * This constructor takes the control DIV as an argument.
+        * @constructor
+        */
+        function CenterControl(controlDiv, map, map2, city) {
+
+            // Set CSS for the control border.
+            var controlUI = document.createElement('div');
+            controlUI.style.backgroundColor = '#fff';
+            controlUI.style.border = '2px solid #fff';
+            controlUI.style.borderRadius = '3px';
+            controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+            controlUI.style.cursor = 'pointer';
+            controlUI.style.marginBottom = '22px';
+            controlUI.style.textAlign = 'center';
+            controlUI.title = 'Click to recenter on ' + city;
+            controlDiv.appendChild(controlUI);
+
+            // Set CSS for the control interior.
+            var controlText = document.createElement('div');
+            controlText.style.color = 'rgb(25,25,25)';
+            controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
+            controlText.style.fontSize = '16px';
+            controlText.style.lineHeight = '38px';
+            controlText.style.paddingLeft = '5px';
+            controlText.style.paddingRight = '5px';
+            controlText.innerHTML = city;
+            controlUI.appendChild(controlText);
+
+            // Setup the click event listeners: set the center to auckland
+            controlUI.addEventListener('click', function() {
+                map.setCenter(cityCoords[city]);
+                map2.setCenter(cityCoords[city]);
+            });
+
+        }
+
+        
+        function initMap() {
+            var customMapType = new google.maps.StyledMapType([
+            {
+                stylers: [
+                    {hue: '#ff66ff'},
+                    {visibility: 'simplified'},
+                    {gamma: 0.5},
+                    {weight: 0.5}
+                ]
+            },
+            {
+                elementType: 'labels',
+                stylers: [{visibility: 'on'}]
+            },
+            {
+                featureType: 'water',
+                stylers: [{color: '#00ace6'}]
+            }],
+            {
+                name: 'Custom Style'
+            });
+            
+            var customMapTypeId = 'custom_style';
+            
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: cityCoords["auckland"],
+                zoom: 10,
+                mapTypeControlOptions: {
+                    mapTypeIds: [google.maps.MapTypeId.ROADMAP, customMapTypeId]
+                }
+            });
+            
+            map.mapTypes.set(customMapTypeId, customMapType);
+            map.setMapTypeId(customMapTypeId);
+            
+            
+            // Define the LatLng coordinates for the polygon.
+            var polygonCoords = [
+                {lat: -36.881575, lng: 174.234981},
+                {lat: -36.724580, lng: 174.342097},
+                {lat: -36.648346, lng: 174.780150},
+                {lat: -36.926599, lng: 175.104247},
+                {lat: -36.961967, lng: 174.448527}
+            ];
+        
+            // Construct the polygon.
+            var bigRedPolygon = new google.maps.Polygon({
+                paths: polygonCoords,
+                strokeColor: '#FF0000',
+                strokeOpacity: 0.9,
+                strokeWeight: 5,
+                fillColor: '#FF0000',
+                fillOpacity: 0.9
+            });
+            bigRedPolygon.setMap(map);
+        
+            
+            var customMapType2 = new google.maps.StyledMapType([
+            {
+                stylers: [
+                    {hue: '#ff66ff'},
+                    {visibility: 'off'},
+                    {gamma: 0.0},
+                    {weight: 0.5}
+                ]
+            },
+            {
+                elementType: 'labels',
+                stylers: [{visibility: 'on'}]
+            },
+            {
+                featureType: 'water',
+                stylers: [
+                    {color: '#00ace6'},
+                    {visibility: 'off'}
+                ]
+            }],
+            {
+                name: 'Custom Style2'
+            });
+            
+            var customMapTypeId2 = 'custom_style2';
+            
+            map2 = new google.maps.Map(document.getElementById('map'), {
+                center: cityCoords["auckland"],
+                zoom: 10,
+                mapTypeControlOptions: {
+                    mapTypeIds: [google.maps.MapTypeId.ROADMAP, customMapTypeId2]
+                }
+            });
+            
+            map2.mapTypes.set(customMapTypeId2, customMapType2);
+            map2.setMapTypeId(customMapTypeId2);
+
+
+            // Add city center buttons
+            var cityCoordsLength = Object.keys(cityCoords).length
+            
+            for (var city in cityCoords) {
+                
+                // Create the div to hold the control and call the CenterControl()
+                // constructor passing in this DIV.
+                var centerControlDiv = document.createElement('div');
+                var centerControl = new CenterControl(centerControlDiv, map, map2, city);
+
+                centerControlDiv.index = cityCoordsLength;
+                map2.controls[google.maps.ControlPosition.TOP_RIGHT].push(centerControlDiv);
+                
+                cityCoordsLength--;
+            }
+            
+        }
+        
+        // If it is a mobile device, set height and width to 100%
+        // If it is a desktop browser, define height and width in pixels
+        function detectBrowser() {
+            var useragent = navigator.userAgent;
+            var mapdiv = document.getElementById("map");
+
+            if (useragent.indexOf('iPhone') != -1 || useragent.indexOf('Android') != -1 ) {
+                mapdiv.style.width = '100%';
+                mapdiv.style.height = '100%';
+            } else {
+                mapdiv.style.width = '600px';
+                mapdiv.style.height = '800px';
+            }
+        }
+        
+    </script>
+    
+    <!-- The async attribute lets the browser render the rest of your website while the Maps API loads. When the API is ready, it will call the initMap function -->
+    <script async defer src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyBVaOS_nhSuSxUYX7hSCRehBgPM83vGGFM&callback=initMap">
+    </script>
+        
+  </body>
+</html>
