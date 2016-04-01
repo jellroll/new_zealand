@@ -22,6 +22,7 @@
     <script>
       
         var map;
+        var map2;
         var infoWindow;
         var cityCoords = {};
 
@@ -40,7 +41,7 @@
         * This constructor takes the control DIV as an argument.
         * @constructor
         */
-        function CenterControl(controlDiv, map, city) {
+        function CenterControl(controlDiv, map, map2, city) {
 
             // Set CSS for the control border.
             var controlUI = document.createElement('div');
@@ -68,6 +69,7 @@
             // Setup the click event listeners: set the center to auckland
             controlUI.addEventListener('click', function() {
                 map.setCenter(cityCoords[city]);
+                map2.setCenter(cityCoords[city]);
             });
 
         }
@@ -134,7 +136,6 @@
             {
                 stylers: [
                     {hue: '#ff66ff'},
-//                    {visibility: 'simplified'},
                     {visibility: 'off'},
                     {gamma: 0.0},
                     {weight: 0.5}
@@ -157,7 +158,7 @@
             
             var customMapTypeId2 = 'custom_style2';
             
-            map = new google.maps.Map(document.getElementById('map'), {
+            map2 = new google.maps.Map(document.getElementById('map'), {
                 center: cityCoords["auckland"],
                 zoom: 10,
                 mapTypeControlOptions: {
@@ -165,8 +166,8 @@
                 }
             });
             
-            map.mapTypes.set(customMapTypeId2, customMapType2);
-            map.setMapTypeId(customMapTypeId2);
+            map2.mapTypes.set(customMapTypeId2, customMapType2);
+            map2.setMapTypeId(customMapTypeId2);
 
 
             // Add city center buttons
@@ -177,27 +178,14 @@
                 // Create the div to hold the control and call the CenterControl()
                 // constructor passing in this DIV.
                 var centerControlDiv = document.createElement('div');
-                var centerControl = new CenterControl(centerControlDiv, map, city);
+                var centerControl = new CenterControl(centerControlDiv, map, map2, city);
 
                 centerControlDiv.index = cityCoordsLength;
-                map.controls[google.maps.ControlPosition.TOP_RIGHT].push(centerControlDiv);
+                map2.controls[google.maps.ControlPosition.TOP_RIGHT].push(centerControlDiv);
                 
                 cityCoordsLength--;
             }
             
-//            // Create the div to hold the control and call the CenterControl()
-//            // constructor passing in this DIV.
-//            var centerAucklandControlDiv = document.createElement('div');
-//            var centerAucklandControl = new CenterControl(centerAucklandControlDiv, map, 'auckland');
-//
-//            centerAucklandControlDiv.index = 1;
-//            map.controls[google.maps.ControlPosition.TOP_RIGHT].push(centerAucklandControlDiv);
-//            
-//            var centerBrisbaneControlDiv = document.createElement('div');
-//            var centerBrisbaneControl = new CenterControl(centerBrisbaneControlDiv, map, 'brisbane');
-//            
-//            centerBrisbaneControlDiv.index = 2;
-//            map.controls[google.maps.ControlPosition.TOP_RIGHT].push(centerBrisbaneControlDiv);
         }
         
         // If it is a mobile device, set height and width to 100%
