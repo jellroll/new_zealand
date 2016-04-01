@@ -169,6 +169,26 @@
             map2.mapTypes.set(customMapTypeId2, customMapType2);
             map2.setMapTypeId(customMapTypeId2);
 
+			
+			map2.addListener('center_changed', function() {
+				map.setCenter(map2.getCenter());
+			});
+			
+//			map2.addListener('dragstart', function() {
+//				map.fitBounds(map2.getBounds());
+//			});
+			
+//			map2.addListener('drag', function() {
+//				map.fitBounds(map2.getBounds());
+//			});
+			
+//			map2.addListener('dragend', function() {
+//				map.fitBounds(map2.getBounds());
+//			});
+			
+//			map2.addListener('idle', function() {
+//				map.fitBounds(map2.getBounds());
+//			});
 
             // Add city center buttons
             var cityCoordsLength = Object.keys(cityCoords).length
@@ -188,6 +208,10 @@
             
         }
         
+		
+
+		
+		
         // If it is a mobile device, set height and width to 100%
         // If it is a desktop browser, define height and width in pixels
         function detectBrowser() {
